@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fe_lw_shams/model/widgets_tamplate/text_field_01.dart';
 import 'package:flutter/material.dart';
 
@@ -19,37 +21,40 @@ class LoginPage extends StatelessWidget {
           height: screenHeight,
           color: Colors.blueGrey[50],
         ),
-        TweenAnimationBuilder<double>(
-          tween: Tween<double>(begin: -150, end: -15), // من خارج الشاشة لليمين
-          duration: const Duration(seconds: 1),
-          curve: Curves.easeOut,
-          builder: (context, value, child) {
-            return Positioned(
-              top: -200,
-              left: value,
-              child: Transform.rotate(
-                angle: 1.0 - value / 150,
+        Positioned(
+          left: 0,
+          child: TweenAnimationBuilder<double>(
+              tween: Tween<double>(begin: 0, end: 1),
+              duration: const Duration(seconds: 1),
+              curve: Curves.easeOut,
+              builder: (context, value, child) {
+                return ClipRect(
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    heightFactor: value,
+                    child: child,
+                  ),
+                );
+              },
+              child: ClipPath(
+                clipper: TriangleClipper(),
                 child: Container(
-                  width: 200,
-                  height: 800,
-                  color: Colors.blueAccent.withOpacity(0.4),
-                  child: Center(
-                      child: Transform.rotate(
-                    angle: -1.3,
-                    child: Text(
-                      'مرحبا بك!',
-                      style: TextStyle(
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blueGrey.withOpacity(0.7),
-                      ),
-                    ),
-                  )),
+                  width: screenWidth * 0.7,
+                  height: screenHeight * 0.9,
+                  color: Colors.yellowAccent.withOpacity(0.3),
                 ),
-              ),
-            );
-          },
+              )),
         ),
+        Positioned(
+            top: 100,
+            left: MediaQuery.of(context).size.width * 0.09,
+            child: Text(
+              "مرحباََ بك !",
+              style: TextStyle(
+                  fontSize: 35,
+                  fontWeight: FontWeight.w900,
+                  color: Colors.orangeAccent),
+            )),
         Center(
           child: SizedBox(
             width: MediaQuery.of(context).size.width > 500
@@ -78,4 +83,22 @@ class LoginPage extends StatelessWidget {
       ],
     );
   }
+}
+
+class TriangleClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path path = Path();
+
+    // نرسم 3 نقاط = مثلث
+    path.moveTo(0, 0); // فوق يسار
+    path.lineTo(size.width, 0); // فوق يمين
+    path.lineTo(0, size.height); // تحت يسار
+
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
