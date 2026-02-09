@@ -42,10 +42,42 @@ class LoginPage extends StatelessWidget {
                   obscureText: true,
                   textDir: TextDirection.ltr,
                 ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: SizedBox(
+                    height: 40,
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                        onPressed: () {},
+                        label: Text("تسجيل الدخول"),
+                        style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)))),
+                  ),
+                ),
+                TextButton(
+                    onPressed: () {},
+                    child: Text("ليس لديك حساب و تسجيل حساب جديد"))
               ],
             ),
           ),
         ),
+        Positioned(
+            top: (screenHeight * 0.5) - 150,
+            left: (screenWidth * 0.5) - 50,
+            child: TweenAnimationBuilder<double>(
+                tween: Tween(begin: 0.0, end: 1.0),
+                duration: const Duration(seconds: 5),
+                curve: Curves.easeOut,
+                builder: (context, moveValue, child) {
+                  return Opacity(
+                      opacity: moveValue,
+                      child: Text(
+                        "شمس",
+                        style: TextStyle(
+                            fontSize: 25, color: Colors.deepOrange[400]),
+                      ));
+                })),
         Positioned(
           top: 0,
           left: 0,
@@ -97,7 +129,7 @@ class LoginPage extends StatelessWidget {
             curve: Curves.linear,
             builder: (context, rotateValue, child) {
               return TweenAnimationBuilder<double>(
-                tween: Tween(begin: 0.0, end: -100.0),
+                tween: Tween(begin: 0.0, end: -150.0),
                 duration: const Duration(seconds: 1),
                 curve: Curves.easeOut,
                 builder: (context, moveValue, child) {
@@ -110,10 +142,20 @@ class LoginPage extends StatelessWidget {
                         builder: (context, moveValue, child) {
                           return Transform.scale(
                               scale: moveValue,
-                              child: CustomPaint(
-                                size: const Size(100, 100),
-                                painter: SpinningCirclePainter(rotateValue),
-                              ));
+                              child: TweenAnimationBuilder<double>(
+                                  tween: Tween(begin: 0.0, end: 100.0),
+                                  duration: const Duration(seconds: 2),
+                                  curve: Curves.easeOut,
+                                  builder: (context, moveValue, child) {
+                                    return Transform.translate(
+                                      offset: Offset(moveValue, 0.0),
+                                      child: CustomPaint(
+                                        size: const Size(100, 100),
+                                        painter:
+                                            SpinningCirclePainter(rotateValue),
+                                      ),
+                                    );
+                                  }));
                         }),
                   );
                 },
@@ -149,26 +191,56 @@ class SpinningCirclePainter extends CustomPainter {
   SpinningCirclePainter(this.rotation);
 
   @override
+  @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..color = Colors.orange
-      ..strokeWidth = 4
-      ..style = PaintingStyle.stroke;
+      ..style = PaintingStyle.fill;
 
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2;
 
-    for (int i = 0; i < 8; i++) {
-      double angle = (i * 2 * 3.1416 / 8) + rotation;
-      final start = Offset(
-        center.dx + radius * 0.8 * cos(angle),
-        center.dy + radius * 0.8 * sin(angle),
+    const int count = 8; // عدد الأشعة
+
+    final double baseWidth = radius * 0.8; // عرض القاعدة
+
+    for (int i = 0; i < count; i++) {
+      final angle = (i * 2 * pi / count) + rotation;
+
+      // رأس المثلث (قريب من المركز)
+      final tip = Offset(
+        center.dx + radius * 0.5 * cos(angle),
+        center.dy + radius * 0.5 * sin(angle),
       );
-      final end = Offset(
+
+      // منتصف القاعدة (على الحافة)
+      final baseCenter = Offset(
         center.dx + radius * cos(angle),
         center.dy + radius * sin(angle),
       );
-      canvas.drawLine(start, end, paint);
+
+      // اتجاه عمودي على الشعاع
+      final perpAngle = angle + pi / 2;
+
+      // طرفي القاعدة
+      final baseLeft = Offset(
+        baseCenter.dx + baseWidth * cos(perpAngle),
+        baseCenter.dy + baseWidth * sin(perpAngle),
+      );
+
+      final baseRight = Offset(
+        baseCenter.dx - baseWidth * cos(perpAngle),
+        baseCenter.dy - baseWidth * sin(perpAngle),
+      );
+
+      // رسم المثلث
+      final path = Path()
+        ..moveTo(tip.dx, tip.dy)
+        ..lineTo(baseLeft.dx, baseLeft.dy)
+        ..lineTo(baseRight.dx, baseRight.dy)
+        ..close();
+
+      canvas.drawPath(path, paint);
     }
   }
 
