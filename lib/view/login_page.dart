@@ -19,42 +19,8 @@ class LoginPage extends StatelessWidget {
         Container(
           width: screenWidth,
           height: screenHeight,
-          color: Colors.blueGrey[50],
+          color: Colors.grey[50],
         ),
-        Positioned(
-          left: 0,
-          child: TweenAnimationBuilder<double>(
-              tween: Tween<double>(begin: 0, end: 1),
-              duration: const Duration(seconds: 1),
-              curve: Curves.easeOut,
-              builder: (context, value, child) {
-                return ClipRect(
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    heightFactor: value,
-                    child: child,
-                  ),
-                );
-              },
-              child: ClipPath(
-                clipper: TriangleClipper(),
-                child: Container(
-                  width: screenWidth * 0.7,
-                  height: screenHeight * 0.9,
-                  color: Colors.yellowAccent.withOpacity(0.3),
-                ),
-              )),
-        ),
-        Positioned(
-            top: 100,
-            left: MediaQuery.of(context).size.width * 0.09,
-            child: Text(
-              "مرحباََ بك !",
-              style: TextStyle(
-                  fontSize: 35,
-                  fontWeight: FontWeight.w900,
-                  color: Colors.orangeAccent),
-            )),
         Center(
           child: SizedBox(
             width: MediaQuery.of(context).size.width > 500
@@ -79,7 +45,78 @@ class LoginPage extends StatelessWidget {
               ],
             ),
           ),
-        )
+        ),
+        Positioned(
+          top: 0,
+          left: 0,
+          child: TweenAnimationBuilder<double>(
+            tween: Tween<double>(begin: 0, end: 1),
+            duration: const Duration(seconds: 2),
+            curve: Curves.easeInOutCubicEmphasized,
+            builder: (context, value, child) {
+              return Transform(
+                alignment: Alignment.topLeft,
+                transform: Matrix4.identity()
+                  ..translate(0.0, -screenHeight * 0.35 * value)
+                  ..rotateZ(-0.2 * value),
+                child: Container(
+                  width: screenWidth,
+                  height: screenHeight * 0.5,
+                  color: Colors.blueGrey,
+                ),
+              );
+            },
+          ),
+        ),
+        Positioned(
+            bottom: 0,
+            right: 0,
+            child: TweenAnimationBuilder<double>(
+                tween: Tween<double>(begin: 0, end: 1),
+                duration: const Duration(seconds: 2),
+                curve: Curves.easeInOutCubicEmphasized,
+                builder: (context, value, child) {
+                  return Transform(
+                    alignment: Alignment.topLeft,
+                    transform: Matrix4.identity()
+                      ..translate(0.0, screenHeight * 0.35 * value)
+                      ..rotateZ(0.2 * value),
+                    child: Container(
+                      width: screenWidth,
+                      height: screenHeight * 0.5,
+                      color: Colors.blueGrey,
+                    ),
+                  );
+                })),
+        Positioned(
+          top: (screenHeight * 0.5) - 50,
+          left: (screenWidth * 0.5) - 50,
+          child: TweenAnimationBuilder<double>(
+            // المرحلة الأولى: الدوران
+            tween: Tween(begin: 0.0, end: 1.0),
+            duration: const Duration(seconds: 2),
+            curve: Curves.linear,
+            builder: (context, rotateValue, child) {
+              return TweenAnimationBuilder<double>(
+                // المرحلة الثانية: الحركة بعد الدوران
+                tween: Tween(begin: 0.0, end: 1.0),
+                duration: const Duration(seconds: 2),
+                curve: Curves.easeOut,
+                builder: (context, moveValue, child) {
+                  return Transform(
+                    transform: Matrix4.identity()
+                      ..translate(0.0, -100 * moveValue)
+                      ..rotateY(0.5),
+                    child: CustomPaint(
+                      size: const Size(100, 100),
+                      painter: SpinningCirclePainter(rotateValue),
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+        ),
       ],
     );
   }
@@ -90,10 +127,9 @@ class TriangleClipper extends CustomClipper<Path> {
   Path getClip(Size size) {
     Path path = Path();
 
-    // نرسم 3 نقاط = مثلث
-    path.moveTo(0, 0); // فوق يسار
-    path.lineTo(size.width, 0); // فوق يمين
-    path.lineTo(0, size.height); // تحت يسار
+    path.moveTo(0, 0);
+    path.lineTo(size.width, 0);
+    path.lineTo(0, size.height);
 
     path.close();
     return path;
@@ -101,4 +137,37 @@ class TriangleClipper extends CustomClipper<Path> {
 
   @override
   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+}
+
+class SpinningCirclePainter extends CustomPainter {
+  final double rotation; // زاوية الدوران
+
+  SpinningCirclePainter(this.rotation);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.orange
+      ..strokeWidth = 4
+      ..style = PaintingStyle.stroke;
+
+    final center = Offset(size.width / 2, size.height / 2);
+    final radius = size.width / 2;
+
+    for (int i = 0; i < 8; i++) {
+      double angle = (i * 2 * 3.1416 / 8) + rotation;
+      final start = Offset(
+        center.dx + radius * 0.8 * cos(angle),
+        center.dy + radius * 0.8 * sin(angle),
+      );
+      final end = Offset(
+        center.dx + radius * cos(angle),
+        center.dy + radius * sin(angle),
+      );
+      canvas.drawLine(start, end, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant SpinningCirclePainter oldDelegate) => true;
 }
