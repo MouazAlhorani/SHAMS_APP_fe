@@ -92,25 +92,29 @@ class LoginPage extends StatelessWidget {
           top: (screenHeight * 0.5) - 50,
           left: (screenWidth * 0.5) - 50,
           child: TweenAnimationBuilder<double>(
-            // المرحلة الأولى: الدوران
             tween: Tween(begin: 0.0, end: 1.0),
             duration: const Duration(seconds: 2),
             curve: Curves.linear,
             builder: (context, rotateValue, child) {
               return TweenAnimationBuilder<double>(
-                // المرحلة الثانية: الحركة بعد الدوران
                 tween: Tween(begin: 0.0, end: -100.0),
                 duration: const Duration(seconds: 1),
                 curve: Curves.easeOut,
                 builder: (context, moveValue, child) {
                   return Transform.translate(
                     offset: Offset(0.0, moveValue),
-                    child: Transform.scale(
-                        scale: 0.5,
-                        child: CustomPaint(
-                          size: const Size(100, 100),
-                          painter: SpinningCirclePainter(rotateValue),
-                        )),
+                    child: TweenAnimationBuilder<double>(
+                        tween: Tween(begin: 0.0, end: 0.5),
+                        duration: const Duration(seconds: 1),
+                        curve: Curves.easeOut,
+                        builder: (context, moveValue, child) {
+                          return Transform.scale(
+                              scale: moveValue,
+                              child: CustomPaint(
+                                size: const Size(100, 100),
+                                painter: SpinningCirclePainter(rotateValue),
+                              ));
+                        }),
                   );
                 },
               );
