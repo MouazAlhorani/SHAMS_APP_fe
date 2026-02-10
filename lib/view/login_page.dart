@@ -64,7 +64,8 @@ class LoginPage extends StatelessWidget {
         ),
         Positioned(
             top: (screenHeight * 0.5) - 150,
-            left: (screenWidth * 0.5) - 50,
+            left: 0,
+            right: 0,
             child: TweenAnimationBuilder<double>(
                 tween: Tween(begin: 0.0, end: 1.0),
                 duration: const Duration(seconds: 5),
@@ -72,10 +73,14 @@ class LoginPage extends StatelessWidget {
                 builder: (context, moveValue, child) {
                   return Opacity(
                       opacity: moveValue,
-                      child: Text(
-                        "شمس",
-                        style: TextStyle(
-                            fontSize: 25, color: Colors.deepOrange[400]),
+                      child: Center(
+                        child: Text(
+                          "شمس",
+                          style: TextStyle(
+                              fontFamily: 'ReemKufiFun',
+                              fontSize: 35,
+                              color: Colors.deepOrange[400]),
+                        ),
                       ));
                 })),
         Positioned(
@@ -136,14 +141,14 @@ class LoginPage extends StatelessWidget {
                   return Transform.translate(
                     offset: Offset(0.0, moveValue),
                     child: TweenAnimationBuilder<double>(
-                        tween: Tween(begin: 0.0, end: 0.5),
+                        tween: Tween(begin: 0.0, end: 0.6),
                         duration: const Duration(seconds: 1),
                         curve: Curves.easeOut,
                         builder: (context, moveValue, child) {
                           return Transform.scale(
                               scale: moveValue,
                               child: TweenAnimationBuilder<double>(
-                                  tween: Tween(begin: 0.0, end: 100.0),
+                                  tween: Tween(begin: 0.0, end: 190.0),
                                   duration: const Duration(seconds: 2),
                                   curve: Curves.easeOut,
                                   builder: (context, moveValue, child) {
@@ -191,21 +196,19 @@ class SpinningCirclePainter extends CustomPainter {
   SpinningCirclePainter(this.rotation);
 
   @override
-  @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.orange
+      ..color = const Color.fromARGB(202, 233, 147, 19)
       ..style = PaintingStyle.fill;
 
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2;
 
     const int count = 8; // عدد الأشعة
-
-    final double baseWidth = radius * 0.8; // عرض القاعدة
+    final double baseWidth = radius * 0.8; // عرض القاعدة (عدلها حسب الشكل)
 
     for (int i = 0; i < count; i++) {
-      final angle = (i * 2 * pi / count) + rotation;
+      final double angle = (i * 2 * pi / count) + rotation;
 
       // رأس المثلث (قريب من المركز)
       final tip = Offset(
@@ -219,8 +222,8 @@ class SpinningCirclePainter extends CustomPainter {
         center.dy + radius * sin(angle),
       );
 
-      // اتجاه عمودي على الشعاع
-      final perpAngle = angle + pi / 2;
+      // زاوية عمودية
+      final double perpAngle = angle + pi / 2;
 
       // طرفي القاعدة
       final baseLeft = Offset(
@@ -245,5 +248,7 @@ class SpinningCirclePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant SpinningCirclePainter oldDelegate) => true;
+  bool shouldRepaint(covariant SpinningCirclePainter oldDelegate) {
+    return oldDelegate.rotation != rotation;
+  }
 }
