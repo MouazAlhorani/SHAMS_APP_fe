@@ -3,8 +3,26 @@ import 'dart:math';
 import 'package:fe_lw_shams/model/widgets_tamplate/text_field_01.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  double openCloseValue = 0.0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    Future.delayed(const Duration(seconds: 1), () {
+      setState(() {
+        openCloseValue = 1.0;
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,16 +74,114 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
                 TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {
+                        openCloseValue = 0.0;
+                      });
+                      Future.delayed(const Duration(milliseconds: 1700), () {
+                        setState(() {
+                          openCloseValue = 1.0; // افتح من جديد
+                        });
+                      });
+                    },
                     child: Text("ليس لديك حساب و تسجيل حساب جديد"))
               ],
             ),
           ),
         ),
         Positioned(
-            top: (screenHeight * 0.5) - 150,
-            left: 0,
+          top: 0,
+          left: 0,
+          child: TweenAnimationBuilder<double>(
+            tween: Tween<double>(begin: 0, end: openCloseValue),
+            duration: const Duration(seconds: 2),
+            curve: Curves.easeInOutCubicEmphasized,
+            builder: (context, value, child) {
+              return Transform(
+                alignment: Alignment.topLeft,
+                transform: Matrix4.identity()
+                  ..translate(0.0, -screenHeight * 0.35 * value)
+                  ..rotateZ(-0.2 * value),
+                child: Container(
+                  width: screenWidth,
+                  height: screenHeight * 0.5,
+                  decoration: BoxDecoration(
+                      color: openCloseValue == 1.0
+                          ? Colors.blue[100]
+                          : Colors.black,
+                      border: Border(
+                          bottom: BorderSide(
+                              width: 5,
+                              color: openCloseValue == 1.0
+                                  ? Colors.blue.withOpacity(0.5)
+                                  : Colors.black.withOpacity(0.5)))),
+                ),
+              );
+            },
+          ),
+        ),
+        Positioned(
+            bottom: 0,
             right: 0,
+            child: TweenAnimationBuilder<double>(
+                tween: Tween<double>(begin: 0, end: openCloseValue),
+                duration: const Duration(seconds: 2),
+                curve: Curves.easeInOutCubicEmphasized,
+                builder: (context, value, child) {
+                  return Transform(
+                    alignment: Alignment.topLeft,
+                    transform: Matrix4.identity()
+                      ..translate(0.0, screenHeight * 0.35 * value)
+                      ..rotateZ(0.2 * value),
+                    child: Container(
+                      width: screenWidth,
+                      height: screenHeight * 0.5,
+                      decoration: BoxDecoration(
+                          color: openCloseValue == 1.0
+                              ? Colors.green[200]
+                              : Colors.black,
+                          border: Border(
+                              top: BorderSide(
+                                  width: 5,
+                                  color: openCloseValue == 1.0
+                                      ? Colors.green.withOpacity(0.5)
+                                      : Colors.black))),
+                    ),
+                  );
+                })),
+        Positioned(
+          top: (screenHeight * 0.5) - 50,
+          left: (screenWidth * 0.5) - 50,
+          child: TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0.0, end: openCloseValue == 1.0 ? -150.0 : 0.0),
+            duration: const Duration(seconds: 1),
+            curve: Curves.easeOut,
+            builder: (context, moveValue, child) {
+              return Transform.translate(
+                offset: Offset(0.0, moveValue),
+                child: TweenAnimationBuilder<double>(
+                    tween: Tween(
+                        begin: 0.0, end: openCloseValue == 0.0 ? 1.0 : 0.45),
+                    duration: const Duration(seconds: 1),
+                    curve: Curves.easeOut,
+                    builder: (context, moveValue, child) {
+                      return Transform.scale(
+                          scale: moveValue,
+                          child: Transform.translate(
+                            offset: Offset(moveValue, 0.0),
+                            child: CustomPaint(
+                              size: const Size(100, 100),
+                              painter: SpinningCirclePainter(0.0),
+                            ),
+                          ));
+                    }),
+              );
+            },
+          ),
+        ),
+        Positioned(
+            left: 15,
+            bottom: 5,
             child: TweenAnimationBuilder<double>(
                 tween: Tween(begin: 0.0, end: 1.0),
                 duration: const Duration(seconds: 5),
@@ -79,95 +195,10 @@ class LoginPage extends StatelessWidget {
                           style: TextStyle(
                               fontFamily: 'ReemKufiFun',
                               fontSize: 35,
-                              color: Colors.deepOrange[400]),
+                              color: Colors.white),
                         ),
                       ));
                 })),
-        Positioned(
-          top: 0,
-          left: 0,
-          child: TweenAnimationBuilder<double>(
-            tween: Tween<double>(begin: 0, end: 1),
-            duration: const Duration(seconds: 2),
-            curve: Curves.easeInOutCubicEmphasized,
-            builder: (context, value, child) {
-              return Transform(
-                alignment: Alignment.topLeft,
-                transform: Matrix4.identity()
-                  ..translate(0.0, -screenHeight * 0.35 * value)
-                  ..rotateZ(-0.2 * value),
-                child: Container(
-                  width: screenWidth,
-                  height: screenHeight * 0.5,
-                  color: Colors.blueGrey,
-                ),
-              );
-            },
-          ),
-        ),
-        Positioned(
-            bottom: 0,
-            right: 0,
-            child: TweenAnimationBuilder<double>(
-                tween: Tween<double>(begin: 0, end: 1),
-                duration: const Duration(seconds: 2),
-                curve: Curves.easeInOutCubicEmphasized,
-                builder: (context, value, child) {
-                  return Transform(
-                    alignment: Alignment.topLeft,
-                    transform: Matrix4.identity()
-                      ..translate(0.0, screenHeight * 0.35 * value)
-                      ..rotateZ(0.2 * value),
-                    child: Container(
-                      width: screenWidth,
-                      height: screenHeight * 0.5,
-                      color: Colors.blueGrey,
-                    ),
-                  );
-                })),
-        Positioned(
-          top: (screenHeight * 0.5) - 50,
-          left: (screenWidth * 0.5) - 50,
-          child: TweenAnimationBuilder<double>(
-            tween: Tween(begin: 0.0, end: 1.0),
-            duration: const Duration(seconds: 2),
-            curve: Curves.linear,
-            builder: (context, rotateValue, child) {
-              return TweenAnimationBuilder<double>(
-                tween: Tween(begin: 0.0, end: -150.0),
-                duration: const Duration(seconds: 1),
-                curve: Curves.easeOut,
-                builder: (context, moveValue, child) {
-                  return Transform.translate(
-                    offset: Offset(0.0, moveValue),
-                    child: TweenAnimationBuilder<double>(
-                        tween: Tween(begin: 0.0, end: 0.6),
-                        duration: const Duration(seconds: 1),
-                        curve: Curves.easeOut,
-                        builder: (context, moveValue, child) {
-                          return Transform.scale(
-                              scale: moveValue,
-                              child: TweenAnimationBuilder<double>(
-                                  tween: Tween(begin: 0.0, end: 190.0),
-                                  duration: const Duration(seconds: 2),
-                                  curve: Curves.easeOut,
-                                  builder: (context, moveValue, child) {
-                                    return Transform.translate(
-                                      offset: Offset(moveValue, 0.0),
-                                      child: CustomPaint(
-                                        size: const Size(100, 100),
-                                        painter:
-                                            SpinningCirclePainter(rotateValue),
-                                      ),
-                                    );
-                                  }));
-                        }),
-                  );
-                },
-              );
-            },
-          ),
-        ),
       ],
     );
   }
@@ -204,8 +235,8 @@ class SpinningCirclePainter extends CustomPainter {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2;
 
-    const int count = 8; // عدد الأشعة
-    final double baseWidth = radius * 0.8; // عرض القاعدة (عدلها حسب الشكل)
+    const int count = 20; // عدد الأشعة
+    final double baseWidth = radius * 1.0; // عرض القاعدة (عدلها حسب الشكل)
 
     for (int i = 0; i < count; i++) {
       final double angle = (i * 2 * pi / count) + rotation;

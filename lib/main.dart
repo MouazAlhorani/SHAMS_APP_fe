@@ -14,8 +14,9 @@ class ShamsApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
-          body:
-              Directionality(textDirection: mainDirection, child: LoginPage()),
+          body: SafeArea(
+              child: Directionality(
+                  textDirection: mainDirection, child: LoginPage())),
         ));
   }
 }
