@@ -1,5 +1,6 @@
 import 'package:fe_lw_shams/main_design.dart';
 import 'package:fe_lw_shams/view/login_page.dart';
+import 'package:fe_lw_shams/view/signup_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -12,11 +13,12 @@ class ShamsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          body: SafeArea(
-              child: Directionality(
-                  textDirection: mainDirection, child: LoginPage())),
-        ));
+      debugShowCheckedModeBanner: false,
+      initialRoute: LoginPage.routeName,
+      routes: {
+        LoginPage.routeName: (_) => LoginPage(),
+        SignupPage.routeName: (_) => SignupPage()
+      },
+    );
   }
 }

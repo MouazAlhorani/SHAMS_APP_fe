@@ -8,7 +8,7 @@ class TextField01 extends StatefulWidget {
       required this.label,
       this.obscureText = false,
       this.inputType = TextInputType.text,
-      this.textDir = mainDirection,
+      this.textDir = TextDirection.rtl,
       this.textAlign = TextAlign.center,
       this.autofocus = false});
   final TextEditingController controller;
