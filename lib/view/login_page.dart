@@ -1,7 +1,9 @@
 import 'dart:math';
 
+import 'package:fe_lw_shams/model/arrays/input_fields.dart';
 import 'package:fe_lw_shams/model/widgets_tamplate/text_field_01.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,27 +13,87 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  late TextEditingController nameController;
+  late TextEditingController mobileController;
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
+  late TextEditingController confirmpasswordController;
+
   double openCloseValue = 0.0;
+  bool loginScreen = true;
 
   @override
   void initState() {
-    // TODO: implement initState
+    super.initState();
+
+    nameController = TextEditingController();
+    mobileController = TextEditingController();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+    confirmpasswordController = TextEditingController();
+
     Future.delayed(const Duration(seconds: 1), () {
       setState(() {
         openCloseValue = 1.0;
       });
     });
-    super.initState();
+  }
+
+  Curve closeCurve = Curves.linearToEaseOut;
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    mobileController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    confirmpasswordController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController usernameController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
-
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
+    List<InputFields> loginFields = [
+      InputFields(
+          index: 1,
+          focus: true,
+          controller: emailController,
+          label: "البريد الالكتروني",
+          inputType: TextInputType.emailAddress,
+          textDirection: TextDirection.ltr),
+      InputFields(
+          index: 2,
+          controller: passwordController,
+          label: "كلمة المرور",
+          obscuretext: true,
+          textDirection: TextDirection.ltr)
+    ];
+    List<InputFields> signupFields = [
+      InputFields(
+          index: 1, focus: true, controller: nameController, label: "الاسم"),
+      InputFields(index: 2, controller: mobileController, label: "الهاتف"),
+      InputFields(
+          index: 3,
+          controller: emailController,
+          label: "الايميل",
+          inputType: TextInputType.emailAddress,
+          textDirection: TextDirection.ltr),
+      InputFields(
+          index: 4,
+          controller: passwordController,
+          label: "كلمة المرور",
+          obscuretext: true,
+          textDirection: TextDirection.ltr),
+      InputFields(
+          index: 5,
+          controller: confirmpasswordController,
+          label: "تأكيد كلمة المرور",
+          obscuretext: true,
+          textDirection: TextDirection.ltr)
+    ];
     return Stack(
       children: [
         Container(
@@ -44,48 +106,80 @@ class _LoginPageState extends State<LoginPage> {
             width: MediaQuery.of(context).size.width > 500
                 ? MediaQuery.of(context).size.width * 0.7
                 : MediaQuery.of(context).size.width * 0.9,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                TextField01(
-                  controller: usernameController,
-                  label: "اسم المستخدم (البريد الالكتروني)",
-                  inputType: TextInputType.emailAddress,
-                  textDir: TextDirection.ltr,
-                ),
-                TextField01(
-                  controller: passwordController,
-                  label: "كلمة المرور",
-                  obscureText: true,
-                  textDir: TextDirection.ltr,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: SizedBox(
-                    height: 40,
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                        onPressed: () {},
-                        label: Text("تسجيل الدخول"),
-                        style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)))),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  ...loginScreen
+                      ? loginFields.map((e) => TweenAnimationBuilder(
+                          tween: Tween<double>(begin: 0, end: 1),
+                          duration: Duration(seconds: e.index * 1),
+                          curve: closeCurve,
+                          builder: (context, value, child) {
+                            return Opacity(
+                              opacity: value,
+                              child: TextField01(
+                                  autofocus: e.focus,
+                                  controller: e.controller,
+                                  label: e.label,
+                                  inputType: e.inputType,
+                                  textDir: e.textDirection,
+                                  obscureText: e.obscuretext),
+                            );
+                          }))
+                      : signupFields.map((e) => TweenAnimationBuilder(
+                          tween: Tween<double>(begin: 0, end: 1),
+                          duration: Duration(seconds: e.index * 1),
+                          curve: closeCurve,
+                          builder: (context, value, child) {
+                            return Opacity(
+                              opacity: value,
+                              child: TextField01(
+                                  autofocus: e.focus,
+                                  controller: e.controller,
+                                  label: e.label,
+                                  inputType: e.inputType,
+                                  textDir: e.textDirection,
+                                  obscureText: e.obscuretext),
+                            );
+                          })),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: SizedBox(
+                      height: 40,
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                          onPressed: () {},
+                          label: Text(
+                              loginScreen ? "تسجيل الدخول" : "تسجيل حساب جديد"),
+                          style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)))),
+                    ),
                   ),
-                ),
-                TextButton(
-                    onPressed: () {
-                      setState(() {
-                        openCloseValue = 0.0;
-                      });
-                      Future.delayed(const Duration(milliseconds: 1700), () {
+                  TextButton(
+                      onPressed: () {
                         setState(() {
-                          openCloseValue = 1.0; // افتح من جديد
+                          openCloseValue = 0.0;
                         });
-                      });
-                    },
-                    child: Text("ليس لديك حساب و تسجيل حساب جديد"))
-              ],
+                        Future.delayed(const Duration(milliseconds: 1700), () {
+                          setState(() {
+                            openCloseValue = 1.0;
+                            if (loginScreen) {
+                              signupFields[0].focus = false;
+                              loginFields[0].focus = true;
+                            } else {
+                              loginFields[0].focus = false;
+                              signupFields[0].focus = true;
+                            }
+                            loginScreen = loginScreen ? false : true;
+                          });
+                        });
+                      },
+                      child: Text(loginScreen
+                          ? "ليس لديك حساب _ تسجيل حساب جديد"
+                          : "عودة إلى تسجيل الدخول"))
+                ],
+              ),
             ),
           ),
         ),
@@ -95,7 +189,7 @@ class _LoginPageState extends State<LoginPage> {
           child: TweenAnimationBuilder<double>(
             tween: Tween<double>(begin: 0, end: openCloseValue),
             duration: const Duration(seconds: 2),
-            curve: Curves.easeInOutCubicEmphasized,
+            curve: closeCurve,
             builder: (context, value, child) {
               return Transform(
                 alignment: Alignment.topLeft,
@@ -126,7 +220,7 @@ class _LoginPageState extends State<LoginPage> {
             child: TweenAnimationBuilder<double>(
                 tween: Tween<double>(begin: 0, end: openCloseValue),
                 duration: const Duration(seconds: 2),
-                curve: Curves.easeInOutCubicEmphasized,
+                curve: closeCurve,
                 builder: (context, value, child) {
                   return Transform(
                     alignment: Alignment.topLeft,
@@ -149,31 +243,34 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   );
                 })),
-        Positioned(
-          top: (screenHeight * 0.5) - 50,
-          left: (screenWidth * 0.5) - 50,
+        Center(
           child: TweenAnimationBuilder<double>(
-            tween: Tween(begin: 0.0, end: openCloseValue == 1.0 ? -150.0 : 0.0),
+            tween: Tween(
+                begin: 0.0,
+                end: openCloseValue == 1.0
+                    ? loginScreen
+                        ? -150
+                        : -225.0
+                    : 0.0),
             duration: const Duration(seconds: 1),
-            curve: Curves.easeOut,
+            curve: closeCurve,
             builder: (context, moveValue, child) {
               return Transform.translate(
                 offset: Offset(0.0, moveValue),
                 child: TweenAnimationBuilder<double>(
                     tween: Tween(
-                        begin: 0.0, end: openCloseValue == 0.0 ? 1.0 : 0.45),
+                        begin: 0.0, end: openCloseValue == 1.0 ? 1.0 : 1.5),
                     duration: const Duration(seconds: 1),
-                    curve: Curves.easeOut,
+                    curve: closeCurve,
                     builder: (context, moveValue, child) {
                       return Transform.scale(
                           scale: moveValue,
                           child: Transform.translate(
-                            offset: Offset(moveValue, 0.0),
-                            child: CustomPaint(
-                              size: const Size(100, 100),
-                              painter: SpinningCirclePainter(0.0),
-                            ),
-                          ));
+                              offset: Offset(moveValue, 0.0),
+                              child: SunRays(
+                                rayCount: 20,
+                                radius: 20,
+                              )));
                     }),
               );
             },
@@ -185,7 +282,7 @@ class _LoginPageState extends State<LoginPage> {
             child: TweenAnimationBuilder<double>(
                 tween: Tween(begin: 0.0, end: 1.0),
                 duration: const Duration(seconds: 5),
-                curve: Curves.easeOut,
+                curve: closeCurve,
                 builder: (context, moveValue, child) {
                   return Opacity(
                       opacity: moveValue,
@@ -204,82 +301,39 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-class TriangleClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    Path path = Path();
+class SunRays extends StatelessWidget {
+  final int rayCount; // عدد الأشعة
+  final double radius; // نصف قطر الدائرة التي تدور حولها الأشعة
 
-    path.moveTo(0, 0);
-    path.lineTo(size.width, 0);
-    path.lineTo(0, size.height);
-
-    path.close();
-    return path;
-  }
+  const SunRays({super.key, this.rayCount = 20, this.radius = 50});
 
   @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
-}
-
-class SpinningCirclePainter extends CustomPainter {
-  final double rotation; // زاوية الدوران
-
-  SpinningCirclePainter(this.rotation);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = const Color.fromARGB(202, 233, 147, 19)
-      ..style = PaintingStyle.fill;
-
-    final center = Offset(size.width / 2, size.height / 2);
-    final radius = size.width / 2;
-
-    const int count = 20; // عدد الأشعة
-    final double baseWidth = radius * 1.0; // عرض القاعدة (عدلها حسب الشكل)
-
-    for (int i = 0; i < count; i++) {
-      final double angle = (i * 2 * pi / count) + rotation;
-
-      // رأس المثلث (قريب من المركز)
-      final tip = Offset(
-        center.dx + radius * 0.5 * cos(angle),
-        center.dy + radius * 0.5 * sin(angle),
-      );
-
-      // منتصف القاعدة (على الحافة)
-      final baseCenter = Offset(
-        center.dx + radius * cos(angle),
-        center.dy + radius * sin(angle),
-      );
-
-      // زاوية عمودية
-      final double perpAngle = angle + pi / 2;
-
-      // طرفي القاعدة
-      final baseLeft = Offset(
-        baseCenter.dx + baseWidth * cos(perpAngle),
-        baseCenter.dy + baseWidth * sin(perpAngle),
-      );
-
-      final baseRight = Offset(
-        baseCenter.dx - baseWidth * cos(perpAngle),
-        baseCenter.dy - baseWidth * sin(perpAngle),
-      );
-
-      // رسم المثلث
-      final path = Path()
-        ..moveTo(tip.dx, tip.dy)
-        ..lineTo(baseLeft.dx, baseLeft.dy)
-        ..lineTo(baseRight.dx, baseRight.dy)
-        ..close();
-
-      canvas.drawPath(path, paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant SpinningCirclePainter oldDelegate) {
-    return oldDelegate.rotation != rotation;
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: radius * 4,
+      height: radius * 4,
+      child: Stack(
+        alignment: Alignment.center,
+        children: List.generate(rayCount, (index) {
+          final angle = 2 * pi * index / rayCount; // زاوية كل شعاع
+          return Transform.rotate(
+            angle: angle,
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Container(
+                width: 10, // عرض الشعاع
+                height: 50, // طول الشعاع
+                decoration: BoxDecoration(
+                  color: Colors.orange.withOpacity(0.5),
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.elliptical(100, 300),
+                  ),
+                ),
+              ),
+            ),
+          );
+        }),
+      ),
+    );
   }
 }

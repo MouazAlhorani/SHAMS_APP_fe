@@ -9,13 +9,15 @@ class TextField01 extends StatefulWidget {
       this.obscureText = false,
       this.inputType = TextInputType.text,
       this.textDir = mainDirection,
-      this.textAlign = TextAlign.center});
+      this.textAlign = TextAlign.center,
+      this.autofocus = false});
   final TextEditingController controller;
   final String label;
   final bool obscureText;
   final TextInputType inputType;
   final TextDirection textDir;
   final TextAlign textAlign;
+  final bool autofocus;
   @override
   State<TextField01> createState() => _TextField01State();
 }
@@ -39,6 +41,7 @@ class _TextField01State extends State<TextField01> {
         controller: widget.controller,
         obscureText: isPassword,
         keyboardType: widget.inputType,
+        autofocus: widget.autofocus,
         decoration: InputDecoration(
           label: Text(
             widget.label,
