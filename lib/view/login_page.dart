@@ -104,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                           iconSize: 35,
                           color: mainTheme == ThemeData.light()
                               ? Colors.orange[300]
-                              : Colors.yellowAccent[200],
+                              : Colors.white54,
                         ),
                       );
                     })),
