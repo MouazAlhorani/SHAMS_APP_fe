@@ -42,6 +42,9 @@ class _TextField01State extends State<TextField01> {
         obscureText: isPassword,
         keyboardType: widget.inputType,
         autofocus: widget.autofocus,
+        style: TextStyle(
+            color:
+                mainTheme == ThemeData.light() ? Colors.black : Colors.white),
         decoration: InputDecoration(
           label: Text(
             widget.label,

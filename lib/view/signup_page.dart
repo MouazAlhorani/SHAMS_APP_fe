@@ -41,6 +41,7 @@ class _LoginPageState extends State<SignupPage> {
   }
 
   Curve closeCurve = Curves.linearToEaseOut;
+  bool lightmode = mainTheme == ThemeData.light();
 
   @override
   void dispose() {
@@ -104,8 +105,25 @@ class _LoginPageState extends State<SignupPage> {
               Container(
                 width: screenWidth,
                 height: screenHeight,
-                color: Colors.grey[200],
+                color: mainTheme == ThemeData.light()
+                    ? Colors.grey[200]
+                    : Colors.black87,
               ),
+              Positioned(
+                  top: 125,
+                  right: 25,
+                  child: Switch(
+                      value: lightmode,
+                      onChanged: (v) {
+                        setState(() {
+                          lightmode = v;
+                          if (lightmode) {
+                            mainTheme = ThemeData.light();
+                          } else {
+                            mainTheme = ThemeData.dark();
+                          }
+                        });
+                      })),
               Center(
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width > 500
@@ -222,7 +240,7 @@ class _LoginPageState extends State<SignupPage> {
                             width: screenWidth,
                             height: screenHeight * 0.5,
                             decoration: BoxDecoration(
-                              color: Colors.blueGrey,
+                              color: Colors.blueGrey[800],
                             )));
                   },
                 ),
@@ -244,7 +262,7 @@ class _LoginPageState extends State<SignupPage> {
                             width: screenWidth,
                             height: screenHeight * 0.5,
                             decoration: BoxDecoration(
-                              color: Colors.blueGrey,
+                              color: Colors.blueGrey[800],
                             ),
                           ),
                         );

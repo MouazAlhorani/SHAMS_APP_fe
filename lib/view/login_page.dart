@@ -34,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Curve closeCurve = Curves.linearToEaseOut;
-  bool rtlDirection = true;
+  bool lightmode = mainTheme == ThemeData.light();
 
   @override
   void dispose() {
@@ -72,22 +72,41 @@ class _LoginPageState extends State<LoginPage> {
             Container(
               width: screenWidth,
               height: screenHeight,
-              color: Colors.grey[200],
+              color: mainTheme == ThemeData.light()
+                  ? Colors.grey[200]
+                  : Colors.black87,
             ),
             Positioned(
                 top: 125,
                 right: 25,
-                child: Switch(
-                    value: rtlDirection,
-                    onChanged: (v) {
-                      setState(() {
-                        rtlDirection = v;
-                        if (rtlDirection) {
-                          mainDirection = TextDirection.rtl;
-                        } else {
-                          mainDirection = TextDirection.ltr;
-                        }
-                      });
+                child: TweenAnimationBuilder(
+                    tween: Tween<double>(
+                        begin: 0,
+                        end: mainTheme == ThemeData.light()
+                            ? 0
+                            : -25 * pi / 180),
+                    duration: const Duration(seconds: 1),
+                    curve: closeCurve,
+                    builder: (context, value, child) {
+                      return Transform.rotate(
+                        angle: value,
+                        child: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              mainTheme = mainTheme == ThemeData.light()
+                                  ? ThemeData.dark()
+                                  : ThemeData.light();
+                            });
+                          },
+                          icon: Icon(mainTheme == ThemeData.light()
+                              ? Icons.sunny
+                              : Icons.nights_stay),
+                          iconSize: 35,
+                          color: mainTheme == ThemeData.light()
+                              ? Colors.orange[300]
+                              : Colors.yellowAccent[200],
+                        ),
+                      );
                     })),
             Positioned(top: 160, right: 25, child: Text("اللغة")),
             Center(
@@ -161,7 +180,7 @@ class _LoginPageState extends State<LoginPage> {
                           width: screenWidth,
                           height: screenHeight * 0.5,
                           decoration: BoxDecoration(
-                            color: Colors.blueGrey,
+                            color: Colors.blueGrey[800],
                           )));
                 },
               ),
@@ -183,7 +202,7 @@ class _LoginPageState extends State<LoginPage> {
                           width: screenWidth,
                           height: screenHeight * 0.5,
                           decoration: BoxDecoration(
-                            color: Colors.blueGrey,
+                            color: Colors.blueGrey[800],
                           ),
                         ),
                       );

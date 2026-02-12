@@ -14,6 +14,7 @@ class ShamsApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: mainTheme,
       initialRoute: LoginPage.routeName,
       routes: {
         LoginPage.routeName: (_) => LoginPage(),
