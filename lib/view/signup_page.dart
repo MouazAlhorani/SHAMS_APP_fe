@@ -1,11 +1,12 @@
-import 'dart:math';
-
-import 'package:fe_lw_shams/main_design.dart';
+import 'package:fe_lw_shams/constan_value.dart';
 import 'package:fe_lw_shams/model/arrays/input_fields.dart';
 import 'package:fe_lw_shams/model/widgets_tamplate/text_field_01.dart';
 import 'package:fe_lw_shams/view/login_page.dart';
+import 'package:fe_lw_shams/view/reusable_widgets/change_mode.dart';
+import 'package:fe_lw_shams/view/reusable_widgets/close_part.dart';
+import 'package:fe_lw_shams/view/reusable_widgets/logo.dart';
+import 'package:fe_lw_shams/view/reusable_widgets/logo_name.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -39,9 +40,6 @@ class _LoginPageState extends State<SignupPage> {
     passwordController = TextEditingController();
     confirmpasswordController = TextEditingController();
   }
-
-  Curve closeCurve = Curves.linearToEaseOut;
-  bool lightmode = mainTheme == ThemeData.light();
 
   @override
   void dispose() {
@@ -105,25 +103,11 @@ class _LoginPageState extends State<SignupPage> {
               Container(
                 width: screenWidth,
                 height: screenHeight,
-                color: mainTheme == ThemeData.light()
+                color: Theme.of(context).brightness == Brightness.light
                     ? Colors.grey[200]
                     : Colors.black87,
               ),
-              Positioned(
-                  top: 125,
-                  right: 25,
-                  child: Switch(
-                      value: lightmode,
-                      onChanged: (v) {
-                        setState(() {
-                          lightmode = v;
-                          if (lightmode) {
-                            mainTheme = ThemeData.light();
-                          } else {
-                            mainTheme = ThemeData.dark();
-                          }
-                        });
-                      })),
+              const Positioned(top: 125, right: 25, child: ChangeModeWidget()),
               Center(
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width > 500
@@ -137,7 +121,7 @@ class _LoginPageState extends State<SignupPage> {
                             return TweenAnimationBuilder(
                                 tween: Tween<double>(begin: 0, end: 1),
                                 duration: Duration(seconds: e.index * 1),
-                                curve: closeCurve,
+                                curve: Curves.linearToEaseOut,
                                 builder: (context, value, child) {
                                   return Opacity(
                                     opacity: value,
@@ -224,152 +208,27 @@ class _LoginPageState extends State<SignupPage> {
                 ),
               ),
               Positioned(
-                top: 0,
-                left: 0,
-                child: TweenAnimationBuilder<double>(
-                  tween: Tween<double>(begin: 0, end: openCloseValue),
-                  duration: const Duration(seconds: 2),
-                  curve: closeCurve,
-                  builder: (context, value, child) {
-                    return Transform(
-                        alignment: Alignment.topLeft,
-                        transform: Matrix4.identity()
-                          ..translate(0.0, -screenHeight * 0.35 * value)
-                          ..rotateZ(-0.2 * value),
-                        child: Container(
-                            width: screenWidth,
-                            height: screenHeight * 0.5,
-                            decoration: BoxDecoration(
-                              color: Colors.blueGrey[800],
-                            )));
-                  },
-                ),
-              ),
-              Positioned(
                   bottom: 0,
                   right: 0,
-                  child: TweenAnimationBuilder<double>(
-                      tween: Tween<double>(begin: 0, end: openCloseValue),
-                      duration: const Duration(seconds: 2),
-                      curve: closeCurve,
-                      builder: (context, value, child) {
-                        return Transform(
-                          alignment: Alignment.topLeft,
-                          transform: Matrix4.identity()
-                            ..translate(0.0, screenHeight * 0.35 * value)
-                            ..rotateZ(0.2 * value),
-                          child: Container(
-                            width: screenWidth,
-                            height: screenHeight * 0.5,
-                            decoration: BoxDecoration(
-                              color: Colors.blueGrey[800],
-                            ),
-                          ),
-                        );
-                      })),
-              Center(
-                child: TweenAnimationBuilder<double>(
-                  tween:
-                      Tween(begin: 0.0, end: openCloseValue == 1.0 ? 180 : 0.0),
-                  duration: const Duration(seconds: 1),
-                  curve: closeCurve,
-                  builder: (context, moveValue, child) {
-                    return Transform.translate(
-                      offset: Offset(0.0, moveValue),
-                      child: TweenAnimationBuilder<double>(
-                          tween: Tween(
-                              begin: 0.0,
-                              end: openCloseValue == 1.0 ? 0.8 : 1.5),
-                          duration: const Duration(seconds: 1),
-                          curve: closeCurve,
-                          builder: (context, moveValue, child) {
-                            return Transform.scale(
-                                scale: moveValue,
-                                child: Transform.translate(
-                                    offset: Offset(moveValue, 0.0),
-                                    child: SunRays(
-                                      rayCount: 20,
-                                      radius: 20,
-                                    )));
-                          }),
-                    );
-                  },
-                ),
-              ),
+                  child: ClosePart(
+                    openCloseValue: openCloseValue,
+                    translateValue: 0.35,
+                    rotateValue: 0.2,
+                  )),
               Positioned(
-                  left: 15,
-                  bottom: 5,
-                  child: TweenAnimationBuilder<double>(
-                      tween: Tween(begin: 0.0, end: 1.0),
-                      duration: const Duration(seconds: 5),
-                      curve: closeCurve,
-                      builder: (context, moveValue, child) {
-                        return Opacity(
-                            opacity: moveValue,
-                            child: Center(
-                              child: Text(
-                                "شمس",
-                                style: TextStyle(
-                                    fontFamily: 'ReemKufiFun',
-                                    fontSize: 35,
-                                    color: Colors.white),
-                              ),
-                            ));
-                      })),
+                  top: 0,
+                  right: 0,
+                  child: ClosePart(
+                    openCloseValue: openCloseValue,
+                    translateValue: -0.35,
+                    rotateValue: -0.2,
+                  )),
+              Center(child: Logo(openCloseValue: openCloseValue)),
+              const Positioned(left: 15, bottom: 5, child: LogoName()),
             ],
           ),
         ),
       ),
-    );
-  }
-}
-
-class SunRays extends StatelessWidget {
-  final int rayCount; // عدد الأشعة
-  final double radius; // نصف قطر الدائرة التي تدور حولها الأشعة
-
-  const SunRays({super.key, this.rayCount = 20, this.radius = 50});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: radius * 4,
-      height: radius * 4,
-      child: Stack(alignment: Alignment.center, children: [
-        ...List.generate(rayCount, (index) {
-          final angle = 2 * pi * index / rayCount; // زاوية كل شعاع
-          return Transform.rotate(
-            angle: angle,
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: Container(
-                width: 10, // عرض الشعاع
-                height: 50, // طول الشعاع
-                decoration: BoxDecoration(
-                  color: Colors.yellow.withOpacity(0.6),
-                  border: Border(
-                    top: BorderSide(
-                        color: Colors.deepOrange.withOpacity(0.6), width: 3),
-                  ),
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.elliptical(100, 300),
-                  ),
-                ),
-              ),
-            ),
-          );
-        }),
-        Center(
-          child: Container(
-            width: 25,
-            height: 25,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                border: Border.all(
-                    color: Colors.deepOrange.withOpacity(0.6), width: 2)),
-          ),
-        )
-      ]),
     );
   }
 }

@@ -1,4 +1,4 @@
-import 'package:fe_lw_shams/main_design.dart';
+import 'package:fe_lw_shams/constan_value.dart';
 import 'package:flutter/material.dart';
 
 class TextField01 extends StatefulWidget {
@@ -42,9 +42,6 @@ class _TextField01State extends State<TextField01> {
         obscureText: isPassword,
         keyboardType: widget.inputType,
         autofocus: widget.autofocus,
-        style: TextStyle(
-            color:
-                mainTheme == ThemeData.light() ? Colors.black : Colors.white),
         decoration: InputDecoration(
           label: Text(
             widget.label,
