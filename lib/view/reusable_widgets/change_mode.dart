@@ -28,7 +28,7 @@ class ChangeModeWidget extends StatelessWidget {
               iconSize: 35,
               color: Theme.of(context).brightness == Brightness.light
                   ? Colors.yellow[700]
-                  : Colors.white,
+                  : Colors.grey,
               icon: Icon(Theme.of(context).brightness == Brightness.light
                   ? Icons.sunny
                   : Icons.nights_stay),

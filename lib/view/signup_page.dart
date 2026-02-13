@@ -212,16 +212,18 @@ class _LoginPageState extends State<SignupPage> {
                   right: 0,
                   child: ClosePart(
                     openCloseValue: openCloseValue,
-                    translateValue: 0.35,
-                    rotateValue: 0.2,
+                    translateValueX: -45.0,
+                    translateValueY: 0.40,
+                    rotateValue: 0.0,
                   )),
               Positioned(
                   top: 0,
                   right: 0,
                   child: ClosePart(
                     openCloseValue: openCloseValue,
-                    translateValue: -0.35,
-                    rotateValue: -0.2,
+                    translateValueX: 45.0,
+                    translateValueY: -0.40,
+                    rotateValue: 0.0,
                   )),
               Center(child: Logo(openCloseValue: openCloseValue)),
               const Positioned(left: 15, bottom: 5, child: LogoName()),

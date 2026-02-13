@@ -58,14 +58,14 @@ class Logo extends StatelessWidget {
   Widget build(BuildContext context) {
     Curve closeCurve = Curves.linearToEaseOut;
     return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 0.0, end: openCloseValue == 1.0 ? 150 : 0.0),
-      duration: const Duration(seconds: 1),
+      tween: Tween(begin: 0.0, end: openCloseValue == 1.0 ? 200 : 0.0),
+      duration: const Duration(milliseconds: 2300),
       curve: closeCurve,
       builder: (context, moveValue, child) {
         return Transform.translate(
           offset: Offset(0.0, moveValue),
           child: TweenAnimationBuilder<double>(
-              tween: Tween(begin: 0.0, end: openCloseValue == 1.0 ? 0.8 : 1.5),
+              tween: Tween(begin: 0.0, end: openCloseValue == 1.0 ? 1.0 : 1.5),
               duration: const Duration(seconds: 1),
               curve: closeCurve,
               builder: (context, moveValue, child) {

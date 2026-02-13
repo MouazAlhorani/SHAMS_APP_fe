@@ -1,4 +1,5 @@
 import 'package:fe_lw_shams/constan_value.dart';
+import 'package:fe_lw_shams/controller/direction_provider.dart';
 import 'package:fe_lw_shams/model/arrays/input_fields.dart';
 import 'package:fe_lw_shams/model/widgets_tamplate/text_field_01.dart';
 import 'package:fe_lw_shams/view/reusable_widgets/change_mode.dart';
@@ -7,6 +8,7 @@ import 'package:fe_lw_shams/view/reusable_widgets/logo.dart';
 import 'package:fe_lw_shams/view/reusable_widgets/logo_name.dart';
 import 'package:fe_lw_shams/view/signup_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -65,98 +67,114 @@ class _LoginPageState extends State<LoginPage> {
     ];
 
     return SafeArea(
-      child: Directionality(
-        textDirection: mainDirection,
         child: Scaffold(
-          body: Stack(children: [
-            Container(
-              width: screenWidth,
-              height: screenHeight,
-              color: Theme.of(context).brightness == Brightness.light
-                  ? Colors.grey[200]
-                  : Colors.black87,
-            ),
-            Positioned(
-                top: 125,
-                right: 25,
-                child: Row(
-                  children: [ChangeModeWidget()],
-                )),
-            Center(
-                child: SizedBox(
-                    width: MediaQuery.of(context).size.width > 500
-                        ? MediaQuery.of(context).size.width * 0.7
-                        : MediaQuery.of(context).size.width * 0.9,
-                    child: SingleChildScrollView(
-                        child: Column(
-                      children: [
-                        ...loginFields.map((e) => TweenAnimationBuilder(
-                            tween: Tween<double>(begin: 0, end: 1),
-                            duration: Duration(seconds: e.index * 1),
-                            curve: closeCurve,
-                            builder: (context, value, child) {
-                              return Opacity(
-                                opacity: value,
-                                child: TextField01(
-                                    autofocus: e.focus,
-                                    controller: e.controller,
-                                    label: e.label,
-                                    inputType: e.inputType,
-                                    textDir: e.textDirection,
-                                    obscureText: e.obscuretext),
-                              );
-                            })),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: SizedBox(
-                            height: 40,
-                            width: double.infinity,
-                            child: ElevatedButton.icon(
-                                onPressed: () {},
-                                label: Text("تسجيل الدخول"),
-                                style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10)))),
-                          ),
-                        ),
-                        SizedBox(height: 25),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: TextButton(
-                              onPressed: () async {
-                                setState(() {
-                                  openCloseValue = 0.0;
-                                });
-                                await Future.delayed(Duration(seconds: 2));
-                                Navigator.pushNamed(
-                                    context, SignupPage.routeName);
-                              },
-                              child: Text("ليس لديك حساب _ تسجيل حساب جديد")),
-                        )
-                      ],
-                    )))),
-            Positioned(
-                bottom: 0,
-                right: 0,
-                child: ClosePart(
-                  openCloseValue: openCloseValue,
-                  translateValue: 0.35,
-                  rotateValue: 0.2,
-                )),
-            Positioned(
-                top: 0,
-                right: 0,
-                child: ClosePart(
-                  openCloseValue: openCloseValue,
-                  translateValue: -0.35,
-                  rotateValue: -0.2,
-                )),
-            Center(child: Logo(openCloseValue: openCloseValue)),
-            const Positioned(left: 15, bottom: 5, child: LogoName()),
-          ]),
+      body: Stack(children: [
+        Container(
+          width: screenWidth,
+          height: screenHeight,
+          color: Theme.of(context).brightness == Brightness.light
+              ? Colors.grey[200]
+              : Colors.black87,
         ),
-      ),
-    );
+        Positioned(
+            top: 125,
+            left: 0,
+            right: 0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                ChangeModeWidget(),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      context.read<DirectionProvider>().toggleDirection();
+                    },
+                    child: CircleAvatar(
+                      radius: 15, // نصف الحجم
+                      backgroundImage: AssetImage(
+                          context.watch<DirectionProvider>().textDirection ==
+                                  TextDirection.rtl
+                              ? 'assets/images/syria-f.jpg'
+                              : 'assets/images/usa-f.png'),
+                    ),
+                  ),
+                )
+              ],
+            )),
+        Center(
+            child: SizedBox(
+                width: MediaQuery.of(context).size.width > 500
+                    ? MediaQuery.of(context).size.width * 0.7
+                    : MediaQuery.of(context).size.width * 0.9,
+                child: SingleChildScrollView(
+                    child: Column(
+                  children: [
+                    ...loginFields.map((e) => TweenAnimationBuilder(
+                        tween: Tween<double>(begin: 0, end: 1),
+                        duration: Duration(seconds: e.index * 1),
+                        curve: closeCurve,
+                        builder: (context, value, child) {
+                          return Opacity(
+                            opacity: value,
+                            child: TextField01(
+                                autofocus: e.focus,
+                                controller: e.controller,
+                                label: e.label,
+                                inputType: e.inputType,
+                                textDir: e.textDirection,
+                                obscureText: e.obscuretext),
+                          );
+                        })),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: SizedBox(
+                        height: 40,
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                            onPressed: () {},
+                            label: Text("تسجيل الدخول"),
+                            style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)))),
+                      ),
+                    ),
+                    SizedBox(height: 25),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: TextButton(
+                          onPressed: () async {
+                            setState(() {
+                              openCloseValue = 0.0;
+                            });
+                            await Future.delayed(Duration(seconds: 2));
+                            Navigator.pushNamed(context, SignupPage.routeName);
+                          },
+                          child: Text("ليس لديك حساب _ تسجيل حساب جديد")),
+                    )
+                  ],
+                )))),
+        Positioned(
+            bottom: 0,
+            right: 0,
+            child: ClosePart(
+              openCloseValue: openCloseValue,
+              translateValueX: -100.0,
+              translateValueY: 0.42,
+              rotateValue: 0.0,
+            )),
+        Positioned(
+            top: 0,
+            right: 0,
+            child: ClosePart(
+              openCloseValue: openCloseValue,
+              translateValueX: 100.0,
+              translateValueY: -0.42,
+              rotateValue: 0.0,
+            )),
+        Center(child: Logo(openCloseValue: openCloseValue)),
+        const Positioned(left: 15, bottom: 5, child: LogoName()),
+      ]),
+    ));
   }
 }
