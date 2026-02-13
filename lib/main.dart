@@ -1,11 +1,15 @@
 import 'package:fe_lw_shams/controller/direction_provider.dart';
 import 'package:fe_lw_shams/controller/theme_provider.dart';
+import 'package:fe_lw_shams/services/lang_service.dart';
 import 'package:fe_lw_shams/view/login_page.dart';
 import 'package:fe_lw_shams/view/signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await LangService.load('ar');
+
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => ThemeProvider()),

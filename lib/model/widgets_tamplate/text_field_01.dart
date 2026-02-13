@@ -45,7 +45,7 @@ class _TextField01State extends State<TextField01> {
         decoration: InputDecoration(
           label: Text(
             widget.label,
-            style: TextStyle(fontSize: 14, color: Colors.blueGrey),
+            style: TextStyle(),
           ),
           focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.blueGrey, width: 2),

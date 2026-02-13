@@ -1,14 +1,13 @@
-import 'package:fe_lw_shams/constan_value.dart';
-import 'package:fe_lw_shams/controller/direction_provider.dart';
 import 'package:fe_lw_shams/model/arrays/input_fields.dart';
 import 'package:fe_lw_shams/model/widgets_tamplate/text_field_01.dart';
+import 'package:fe_lw_shams/services/lang_service.dart';
+import 'package:fe_lw_shams/view/reusable_widgets/change_lang.dart';
 import 'package:fe_lw_shams/view/reusable_widgets/change_mode.dart';
 import 'package:fe_lw_shams/view/reusable_widgets/close_part.dart';
 import 'package:fe_lw_shams/view/reusable_widgets/logo.dart';
 import 'package:fe_lw_shams/view/reusable_widgets/logo_name.dart';
 import 'package:fe_lw_shams/view/signup_page.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -55,13 +54,13 @@ class _LoginPageState extends State<LoginPage> {
           index: 1,
           focus: true,
           controller: emailController,
-          label: "البريد الالكتروني",
+          label: LangService.t("e-mail"),
           inputType: TextInputType.emailAddress,
           textDirection: TextDirection.ltr),
       InputFields(
           index: 2,
           controller: passwordController,
-          label: "كلمة المرور",
+          label: LangService.t("password"),
           obscuretext: true,
           textDirection: TextDirection.ltr)
     ];
@@ -80,27 +79,13 @@ class _LoginPageState extends State<LoginPage> {
             top: 125,
             left: 0,
             right: 0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                ChangeModeWidget(),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      context.read<DirectionProvider>().toggleDirection();
-                    },
-                    child: CircleAvatar(
-                      radius: 15, // نصف الحجم
-                      backgroundImage: AssetImage(
-                          context.watch<DirectionProvider>().textDirection ==
-                                  TextDirection.rtl
-                              ? 'assets/images/syria-f.jpg'
-                              : 'assets/images/usa-f.png'),
-                    ),
-                  ),
-                )
-              ],
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [ChangeModeWidget(), ChangeLang()],
+              ),
             )),
         Center(
             child: SizedBox(
@@ -133,15 +118,16 @@ class _LoginPageState extends State<LoginPage> {
                         width: double.infinity,
                         child: ElevatedButton.icon(
                             onPressed: () {},
-                            label: Text("تسجيل الدخول"),
+                            label: Text(LangService.t("login")),
                             style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10)))),
                       ),
                     ),
                     SizedBox(height: 25),
-                    Align(
-                      alignment: Alignment.bottomRight,
+                    Positioned(
+                      left: 0,
+                      right: 0,
                       child: TextButton(
                           onPressed: () async {
                             setState(() {
@@ -150,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                             await Future.delayed(Duration(seconds: 2));
                             Navigator.pushNamed(context, SignupPage.routeName);
                           },
-                          child: Text("ليس لديك حساب _ تسجيل حساب جديد")),
+                          child: Text(LangService.t("dont-have-acc-signup"))),
                     )
                   ],
                 )))),

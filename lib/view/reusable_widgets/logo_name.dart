@@ -1,4 +1,6 @@
+import 'package:fe_lw_shams/controller/direction_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LogoName extends StatelessWidget {
   const LogoName({super.key});
@@ -14,10 +16,17 @@ class LogoName extends StatelessWidget {
               opacity: moveValue,
               child: Center(
                 child: Text(
-                  "شمس",
+                  context.watch<DirectionProvider>().textDirection ==
+                          TextDirection.rtl
+                      ? "شمس"
+                      : "SHAMS",
                   style: TextStyle(
                       fontFamily: 'ReemKufiFun',
-                      fontSize: 35,
+                      fontSize:
+                          context.watch<DirectionProvider>().textDirection ==
+                                  TextDirection.rtl
+                              ? 35
+                              : 25,
                       color: Colors.white),
                 ),
               ));

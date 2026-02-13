@@ -1,0 +1,13 @@
+{
+    "login":"Login",
+    "e-mail":"E mail",
+    "password":"password",
+    "confirm":"Confirm",
+    "name":"Name",
+    "mobile":"mobile",
+    "dont-have-acc-signup":"donr have account ? _ create one",
+    "signup":"Sign Up",
+    "previous":"Prev",
+    "next":"next",
+    "go-back-to-login":"back to Login"
+}
