@@ -1,4 +1,3 @@
-import 'package:fe_lw_shams/constan_value.dart';
 import 'package:fe_lw_shams/model/arrays/input_fields.dart';
 import 'package:fe_lw_shams/model/widgets_tamplate/text_field_01.dart';
 import 'package:fe_lw_shams/services/lang_service.dart';
@@ -31,7 +30,7 @@ class _LoginPageState extends State<SignupPage> {
   void initState() {
     super.initState();
     Future.delayed(
-        Duration(seconds: 1),
+        const Duration(seconds: 1),
         () => setState(() {
               openCloseValue = 1.0;
             }));
@@ -107,12 +106,12 @@ class _LoginPageState extends State<SignupPage> {
                   ? Colors.grey[200]
                   : Colors.black87,
             ),
-            Positioned(
+            const Positioned(
                 top: 125,
                 left: 0,
                 right: 0,
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(8.0),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -146,7 +145,7 @@ class _LoginPageState extends State<SignupPage> {
                                 );
                               });
                         } else {
-                          return SizedBox();
+                          return const SizedBox();
                         }
                       }),
                       Padding(
@@ -175,7 +174,7 @@ class _LoginPageState extends State<SignupPage> {
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(10))))
-                                  : SizedBox(),
+                                  : const SizedBox(),
                               ElevatedButton.icon(
                                   onPressed: () {
                                     switch (actualLayerNumber) {
@@ -199,13 +198,13 @@ class _LoginPageState extends State<SignupPage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 25),
+                      const SizedBox(height: 25),
                       TextButton(
                           onPressed: () async {
                             setState(() {
                               openCloseValue = 0.0;
                             });
-                            await Future.delayed(Duration(seconds: 2));
+                            await Future.delayed(const Duration(seconds: 2));
                             Navigator.pushNamed(context, LoginPage.routeName);
                           },
                           child: Text(LangService.t("go-back-to-login")))

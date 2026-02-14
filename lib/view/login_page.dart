@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
 
     Future.delayed(
-        Duration(seconds: 1),
+        const Duration(seconds: 1),
         () => setState(() {
               openCloseValue = 1.0;
             }));
@@ -73,14 +73,14 @@ class _LoginPageState extends State<LoginPage> {
           height: screenHeight,
           color: Theme.of(context).brightness == Brightness.light
               ? Colors.grey[200]
-              : Colors.black87,
+              : Colors.black45,
         ),
-        Positioned(
+        const Positioned(
             top: 125,
             left: 0,
             right: 0,
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(8.0),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -124,20 +124,16 @@ class _LoginPageState extends State<LoginPage> {
                                     borderRadius: BorderRadius.circular(10)))),
                       ),
                     ),
-                    SizedBox(height: 25),
-                    Positioned(
-                      left: 0,
-                      right: 0,
-                      child: TextButton(
-                          onPressed: () async {
-                            setState(() {
-                              openCloseValue = 0.0;
-                            });
-                            await Future.delayed(Duration(seconds: 2));
-                            Navigator.pushNamed(context, SignupPage.routeName);
-                          },
-                          child: Text(LangService.t("dont-have-acc-signup"))),
-                    )
+                    const SizedBox(height: 25),
+                    TextButton(
+                        onPressed: () async {
+                          setState(() {
+                            openCloseValue = 0.0;
+                          });
+                          await Future.delayed(const Duration(seconds: 2));
+                          Navigator.pushNamed(context, SignupPage.routeName);
+                        },
+                        child: Text(LangService.t("dont-have-acc-signup")))
                   ],
                 )))),
         Positioned(

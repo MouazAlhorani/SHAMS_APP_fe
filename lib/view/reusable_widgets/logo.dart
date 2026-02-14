@@ -28,7 +28,7 @@ class SunRays extends StatelessWidget {
                     top: BorderSide(
                         color: Colors.deepOrange.withOpacity(0.6), width: 3),
                   ),
-                  borderRadius: BorderRadius.vertical(
+                  borderRadius: const BorderRadius.vertical(
                     top: Radius.elliptical(100, 300),
                   ),
                 ),
@@ -73,7 +73,7 @@ class Logo extends StatelessWidget {
                     scale: moveValue,
                     child: Transform.translate(
                         offset: Offset(moveValue, 0.0),
-                        child: SunRays(
+                        child: const SunRays(
                           rayCount: 20,
                           radius: 20,
                         )));

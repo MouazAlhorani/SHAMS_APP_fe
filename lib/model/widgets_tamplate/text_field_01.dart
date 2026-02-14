@@ -1,4 +1,3 @@
-import 'package:fe_lw_shams/constan_value.dart';
 import 'package:flutter/material.dart';
 
 class TextField01 extends StatefulWidget {
@@ -45,9 +44,8 @@ class _TextField01State extends State<TextField01> {
         decoration: InputDecoration(
           label: Text(
             widget.label,
-            style: TextStyle(),
           ),
-          focusedBorder: OutlineInputBorder(
+          focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: Colors.blueGrey, width: 2),
               borderRadius: BorderRadius.all(Radius.circular(10))),
           border: const OutlineInputBorder(
@@ -58,7 +56,7 @@ class _TextField01State extends State<TextField01> {
                   onPressed: () => setState(() => isPassword = !isPassword),
                   icon: Icon(
                       isPassword ? Icons.visibility_off : Icons.visibility))
-              : SizedBox(),
+              : const SizedBox(),
         ),
       ),
     );
